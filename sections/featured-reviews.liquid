@@ -1,0 +1,218 @@
+{%- if section.settings.layout == 'rows' -%}
+  {%- if section.settings.grid == 2 -%}
+    {%- assign product_class = 'column half' -%}
+    {%- elsif section.settings.grid == 4 -%}
+    {%- assign product_class = 'column third' -%}
+  {%- else -%}
+    {%- assign product_class = 'column quarter' -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign max_products = section.settings.grid | times: section.settings.rows -%}
+
+{% assign animation_type = "cc-fade-in-up" %}
+{%- if section.settings.layout == "columns" -%}
+  {% assign animation_type = "cc-fade-in" %}
+{%- endif -%}
+
+{% if section.settings.layout == 'carousel' %}<div class="product-slider Section--featured-reviews">{% endif %}
+
+<div class="wide-container half-gutter section-spacing {% if section.settings.alternate_bg_color %}use-alt-bg {% endif %}" data-section-type="featured-collection" data-cc-animate>
+  {% if section.settings.title != blank or section.settings.show_view_all %}
+    <div class="section-heading cc-animate-init -in cc-animate-complete" data-cc-animate>
+      {% if section.settings.title != blank %}
+        <h2 class="h2">
+            {{ section.settings.title | escape }}
+        </h2>
+      {% else %}
+          <div></div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if section.settings.layout == 'carousel' %}
+    <div class="swiper-container product-list product-list--{{ section.settings.layout }}"
+         data-products-in-view="{{ section.settings.grid }}">
+
+      <div class="swiper-wrapper" data-normheights=".image" data-normheights-inner="img">
+            {%- for block in section.blocks -%}
+            {%- assign product = all_products[block.settings.product] -%}
+            <div class="swiper-slide">             
+            <div class="product-block
+               hover-image
+               product-block--marquee-on-hover 
+               " data-loop-index="1">
+            <div class="image image--hover-second image--same-aspect-ratio">
+               <div class="image__first">
+                  {% render 'responsive-image', image: product.featured_media.preview_image %}
+
+                      {% unless settings.prod_label_layout contains 'marquee' %}
+                        {% render 'product-label', product: product %}
+                      {% endunless %}
+               </div>
+                {% if settings.prod_hover_effect == 'image' and product.media.size > 1 %}
+                <div class="image__second">
+                  {% render 'responsive-image', image: product.media[1].preview_image, aspect_ratio: product.featured_media.preview_image.aspect_ratio %}
+                </div>
+                {% endif %}
+            </div>              
+              </div>              
+              {%- if block.settings.star_rating > 0 -%}
+              <div class="cc-testimonial__star-rating" data-cc-animate="cc-fade-in-up">
+                {%- for i in (1..block.settings.star_rating) -%}
+                <span class="cc-testimonial__star">{% render 'svg-star' %}</span>
+                {%- endfor -%}
+              </div>
+              {%- endif -%}
+               <h5>{{ block.settings.title_paragraph }}</h5>
+               <p>{{ block.settings.paragraph }}</p> 
+               <strong>{{ block.settings.name }}</strong> 
+              {% if section.settings.hide_title != true %}
+              {% if block.settings.product_name != blank %}<small class="product-reviews--title"><a href="{{ product.url }}" alt"{{ product.title }}">{{ block.settings.product_name }}</a></small>  
+               {% else %} <small class="product-reviews--title">{{ product.title }}</small>  
+               {% endif %}
+              {% endif %}
+            </div>
+            {% endfor %}
+      </div>
+      <div class="swiper-scrollbar"></div>
+      <a href="#" class="swiper-button-prev" aria-label="{{ 'general.accessibility_labels.previous' | t | escape }}">{% render 'svg-chevron-left' %}</a>
+      <a href="#" class="swiper-button-next" aria-label="{{ 'general.accessibility_labels.next' | t | escape }}">{% render 'svg-chevron-right' %}</a>
+
+  </div>
+  {% endif %}
+</div>
+
+<div class="button-row btnholder cc-fade-in-up cc-animate-init -in cc-animate-complete" data-cc-animate-delay="0.4s" style="">
+      <a data-cc-animate-click class="btn view-all-link" href="{{ section.settings.button_link }}">
+        {{ section.settings.button_view_all }}
+      </a> 
+</div>
+
+{% if section.settings.layout == 'carousel' %}</div>{% endif %}
+<style>
+.Section--featured-reviews {
+    background: {{ section.settings.background_color }};
+}
+.Section--featured-reviews .ProductList--carousel .Carousel__Cell {
+    min-height: {{ section.settings.height }}px;
+}  
+  
+</style>
+
+{% schema %}
+  {
+    "name": "Featured reviews",
+    "class": "section-featured-collection",
+    "settings": [
+	  {
+      	"type": "color",
+      	"id": "background_color",
+      	"label": "Color background"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Featured reviews"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "Layout",
+        "options": [
+          {
+            "value": "carousel",
+            "label": "Carousel"
+          }
+        ],
+        "default": "carousel",
+        "info": "Collage will only work when the 'Image shape' is set to Natural - in Products / Image shape"
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_title",
+        "label": "Hide all product titles",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "grid",
+        "label": "Desktop products per row",
+        "min": 2,
+        "max": 4,
+        "default": 3
+      },
+      {
+          "type": "text",
+          "id": "button_view_all",
+          "label": "Button title",
+          "default": "Show all",
+          "info": "If left empty, button won't show"
+       },
+       {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button 1 link"
+       }
+    ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Avis",
+      "settings": [
+         {
+            "type": "range",
+            "id": "star_rating",
+            "min": 0,
+            "max": 5,
+            "step": 1,
+            "label": "Star rating",
+            "default": 5
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Custom product name",
+          "info": "If left empty, it will pick product original name."
+        },
+        {
+          "type": "text",
+          "id": "title_paragraph",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "paragraph",
+          "label": "Paragraph",
+          "default" : "This is a paragraph. Write here the product review in few line. Make sure all reviews have the same characters amounts."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Name"
+        }
+      ]
+    }
+  ],
+    "presets": [
+      {
+        "name": "Featured reviews",
+        "category": "Collection",
+        "settings": {}
+      }
+    ]
+  }
+{% endschema %}
+
+
+
+
+

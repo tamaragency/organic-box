@@ -1,0 +1,171 @@
+{% for block in section.blocks %}
+<section class="section-{{ block.id }} cc-popup cc-popup--center"
+    data-freeze-scroll="false"
+    data-section-id="{{ block.id }}"
+    data-modal="popup-{{forloop.index}}"
+    >
+    <div class="cc-popup-background"></div>
+    <div class="cc-popup-modal"
+         role="dialog"
+         aria-modal="true">
+
+      <button type="button" class="cc-popup-close" aria-label="{{ 'general.accessibility_labels.close' | t | escape }}">
+        {% render 'popup-close' %}
+      </button>
+
+      <div class="cc-popup-container">
+
+        {%- if block.settings.title != blank or block.settings.text != blank or block.settings.show_newsletter == true or block.settings.show_social_icons == true -%}
+          <div class="cc-popup-content">
+            <div class="cc-popup-column">
+              {%- if block.settings.title != blank or block.settings.text != blank -%}
+                <div class="cc-popup-text">
+                  {%- if block.settings.title != blank -%}
+                    <h2 class="cc-popup-title">{{ block.settings.title }}</h2>
+                  {%- endif -%}
+                  {%- if block.settings.content != blank -%}
+                    <div class="rte">{{ block.settings.content }}</div>
+                  {%- endif -%}
+                  {%- assign show_buttons = false -%}
+                  {%- capture buttons -%}
+                  {%- for i in (1..6) -%}
+                  {%- capture btn_text -%}modal_button_{{i}}_label{%- endcapture -%}
+                  {%- capture btn_link -%}modal_button_{{i}}_link{%- endcapture -%}
+                  {%- if block.settings[btn_text] != blank and block.settings[btn_link] != blank -%}{%- assign show_buttons = true -%}
+                  <li class="column third"><a class="button btn{% if block.settings[btn_link] == '#resume_quiz' %} resume-quiz{% endif %}" href="{{block.settings[btn_link]}}">{{ block.settings[btn_text] }}</a></li>
+                  {%- endif -%}
+                  {%- endfor -%}
+                  {%- endcapture -%}
+                  {%- if show_buttons -%}
+                  <div class="button-group-wrapper">
+                    <ul class="button-group grid--uniform row clearfix">{{buttons}}</ul>
+                  </div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </section>
+{% endfor %}
+{% schema %}
+  {
+    "name": "Questionnaire Modals",
+    "settings": [],
+	"blocks": [
+	  {
+        "type": "modal",
+        "name": "Popup",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content"
+          },
+		  {
+            "type": "header",
+            "content": "Buttons"
+          },
+		  {
+            "type": "paragraph",
+            "content": "Button 1"
+          },
+		  {
+            "type": "text",
+            "id": "modal_button_1_label",
+            "label": "Button text"
+          },
+		  {
+            "type": "url",
+            "id": "modal_button_1_link",
+            "label": "Button link",
+			"info": "Use '#resume_quiz' to insert a continue quiz link"
+          },
+		  {
+            "type": "paragraph",
+            "content": "Button 2"
+          },
+		  {
+            "type": "text",
+            "id": "modal_button_2_label",
+            "label": "Button text"
+          },
+		  {
+            "type": "url",
+            "id": "modal_button_2_link",
+            "label": "Button link",
+			"info": "Use '#resume_quiz' to insert a continue quiz link"
+          },
+		  {
+            "type": "paragraph",
+            "content": "Button 3"
+          },
+		  {
+            "type": "text",
+            "id": "modal_button_3_label",
+            "label": "Button text"
+          },
+		  {
+            "type": "url",
+            "id": "modal_button_3_link",
+            "label": "Button link",
+			"info": "Use '#resume_quiz' to insert a continue quiz link"
+          },
+		  {
+            "type": "paragraph",
+            "content": "Button 4"
+          },
+		  {
+            "type": "text",
+            "id": "modal_button_4_label",
+            "label": "Button text"
+          },
+		  {
+            "type": "url",
+            "id": "modal_button_4_link",
+            "label": "Button link",
+			"info": "Use '#resume_quiz' to insert a continue quiz link"
+          },
+		  {
+            "type": "paragraph",
+            "content": "Button 5"
+          },
+		  {
+            "type": "text",
+            "id": "modal_button_5_label",
+            "label": "Button text"
+          },
+		  {
+            "type": "url",
+            "id": "modal_button_5_link",
+            "label": "Button link",
+			"info": "Use '#resume_quiz' to insert a continue quiz link"
+          },
+		  {
+            "type": "paragraph",
+            "content": "Button 6"
+          },
+		  {
+            "type": "text",
+            "id": "modal_button_6_label",
+            "label": "Button text"
+          },
+		  {
+            "type": "url",
+            "id": "modal_button_6_link",
+            "label": "Button link",
+			"info": "Use '#resume_quiz' to insert a continue quiz link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

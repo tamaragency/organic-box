@@ -1,0 +1,827 @@
+{% if section.blocks.size > 0 %}
+<div class="color-palette-container">
+  <div class="flexible-layout">
+    <div class="column--quarter headings">
+      <ul class="color-palette" data-questions="{{section.settings.combination_question_1 | replace:':','-' | prepend: 'box-'}},{{section.settings.combination_question_2 | replace:':','-' | prepend: 'box-'}}">
+      {% for block in section.blocks %}
+      {% if block.settings.title != blank %}
+      <li class="shade-family" data-combinations="{{block.settings.color_conbinations | replace:' ,',',' | replace:', ',',' | replace: ' , ',','}}">
+        <div class="shade-family-inner">       
+            <span class="shade-family-level"></span>
+            <span class="shade-family-name">{{block.settings.title}}</span>
+        </div>   
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    </div>
+    <div class="column--three-quarters swatches">
+      <ul class="color-palette" data-questions="{{section.settings.combination_question_1 | replace:':','-' | prepend: 'box-'}},{{section.settings.combination_question_2 | replace:':','-' | prepend: 'box-'}}">
+      {% for block in section.blocks %}
+      {% if block.settings.title != blank %}
+      <li class="shade-family" data-combinations="{{block.settings.color_conbinations | replace:' ,',',' | replace:', ',',' | replace: ' , ',','}}" data-step="{{ section.settings.questionnaire_step_number | plus: 0 }}" data-category="{%if block.settings.title != blank%}{{ block.settings.title }}{% endif %}">
+        <div class="shade-family-inner">
+            <ul class="swatch-colors">
+              {% for j in (1..30) %}
+              {% capture shade_image %}shade_{{j}}_image{% endcapture %}
+              {% capture shade_title %}shade_{{j}}_title{% endcapture %}
+              {% capture shade_link %}shade_{{j}}_link{% endcapture %}
+              <li class="swatch-color">
+                {% if block.settings[shade_image] %}
+                <div class="swatch-color-img-wrapper" style="max-width:30px;">
+                  <a href="{% if block.settings[shade_link] != blank %}{{block.settings[shade_link]}}{% else %}javascript:void(0);{% endif %}" class="js-select-swatch" title="{% if block.settings[shade_title] != blank %}{{block.settings[shade_title]}}{% else %} {%- comment -%} {{block.settings[shade_image] | img_url: 'master' | split:'/' | last | split:'.' | first | remove: 'swatch-' | replace: '-', ' ' | capitalize}}{%- endcomment -%}{% endif %}">
+                    <img src="{{ block.settings[shade_image] | img_url: 'master' }}" alt="swatch-color-image">
+                    {%- comment -%}
+                      {% render 'responsive-image', image: block.settings[shade_image], aspect_ratio: 1 %}
+                    {%- endcomment -%}
+                  </a>
+                </div>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+        </div>   
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% schema %}
+  {
+    "name": "Final Step Color Palette",
+    "settings": [
+	    {
+        "type": "text",
+        "id": "combination_question_1",
+        "label": "Combination question 1",
+		    "default": "3:3",
+		    "info": "Use format- {STEP NUMBER}:{QUESTION NUMBER}.For example to use 'third question' from 'third step' just write 3:3"
+      },
+	    {
+        "type": "text",
+        "id": "combination_question_2",
+        "label": "Combination question 2",
+		    "default": "3:4",
+		    "info": "Use format- {STEP NUMBER}:{QUESTION NUMBER}.For example to use 'fourth question' from 'third step' just write 3:4"
+      },
+      {
+        "type": "text",
+        "id": "questionnaire_step_number",
+        "label": "Questionnaire Step Number",
+        "default": "4"
+      }
+      /*{
+        "type": "header",
+        "content": "Styling"
+      },
+      {
+        "type": "color",
+        "id": "active_shade_family_color",
+        "label": "Active shade family color",
+		"default": "#0B3127"
+      }*/  
+    ],
+	"blocks": [
+      {
+        "type": "shade-family",
+        "name": "Shade family",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading"
+          },
+		  {
+            "type": "textarea",
+            "id": "color_conbinations",
+            "label": "Color combinations",
+			"info": "Enter a comma(,) separated list of color combination Ex: noir+noir, noir+châtain, etc."
+          },
+		  {
+            "type": "header",
+            "content": "Shade 1"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_1_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_1_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_1_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_1_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 2"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_2_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_2_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_2_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_2_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 3"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_3_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_3_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_3_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_3_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 4"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_4_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_4_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_4_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_4_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 5"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_5_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_5_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_5_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_5_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 6"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_6_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_6_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_6_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_6_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 7"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_7_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_7_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_7_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_7_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 8"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_8_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_8_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_8_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_8_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 9"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_9_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_9_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_9_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_9_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 10"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_10_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_10_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_10_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_10_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 11"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_11_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_11_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_11_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_11_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 12"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_12_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_12_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_12_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_12_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 13"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_13_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_13_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_13_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_13_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 14"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_14_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_14_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_14_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_14_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 15"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_15_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_15_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_15_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_15_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 16"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_16_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_16_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_16_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_16_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 17"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_17_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_17_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_17_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_17_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 18"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_18_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_18_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_18_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_18_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 19"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_19_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_19_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_19_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_19_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 20"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_20_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_20_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_20_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_20_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 21"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_21_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_21_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_21_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_21_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 22"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_22_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_22_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_22_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_22_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 23"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_23_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_23_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_23_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_23_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 24"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_24_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_24_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_24_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_24_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 25"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_25_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_25_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_25_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_25_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 26"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_26_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_26_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_26_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_26_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 27"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_27_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_27_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_27_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_27_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 28"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_28_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_28_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_28_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_28_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 29"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_29_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_29_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_29_info",
+            "label": "Info"
+          },*/
+		  {
+            "type": "text",
+            "id": "shade_29_link",
+            "label": "Link"
+          },
+		  {
+            "type": "header",
+            "content": "Shade 30"
+          },
+		  {
+            "type": "image_picker",
+            "id": "shade_30_image",
+            "label": "Image"
+          },
+          {
+            "type": "textarea",
+            "id": "shade_30_title",
+            "label": "Title"
+          },
+		  /*{
+            "type": "richtext",
+            "id": "shade_30_info",
+            "label": "Info"
+          }*/
+		  {
+            "type": "text",
+            "id": "shade_30_link",
+            "label": "Link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

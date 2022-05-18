@@ -1,0 +1,67 @@
+<div class="icons-row__item item">
+	{%- if image != blank -%}
+		<div class="icons-row__image">
+			{%- assign image_widths = '[295,394,590,700]' -%}
+			{%- assign image_url_pattern = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+			<img src="{{ image | img_url: '512x' }}" alt="{{ image.alt | escape }}">
+		</div>
+	{%- elsif icon != blank -%}
+		{%- case icon -%}
+			{%- when 'award' -%}
+				{%- render 'icon-award' -%}
+			{%- when 'basket' -%}
+				{%- render 'icon-basket' -%}
+			{%- when 'ball' -%}
+				{%- render 'icon-ball' -%}
+			{%- when 'calendar' -%}
+				{%- render 'icon-calendar' -%}
+			{%- when 'camera' -%}
+				{%- render 'icon-camera' -%}
+			{%- when 'comment' -%}
+				{%- render 'icon-comment' -%}
+			{%- when 'data' -%}
+				{%- render 'icon-data' -%}
+			{%- when 'dollar' -%}
+				{%- render 'icon-dollar' -%}
+			{%- when 'email' -%}
+				{%- render 'icon-email' -%}
+			{%- when 'eye' -%}
+				{%- render 'icon-eye' -%}
+			{%- when 'fruits' -%}
+				{%- render 'icon-fruits' -%}
+			{%- when 'house' -%}
+				{%- render 'icon-house' -%}
+			{%- when 'lock' -%}
+				{%- render 'icon-lock' -%}
+			{%- when 'money' -%}
+				{%- render 'icon-money' -%}
+			{%- when 'phone' -%}
+				{%- render 'icon-phone' -%}
+			{%- when 'reload' -%}
+				{%- render 'icon-reload' -%}
+			{%- when 'shop' -%}
+				{%- render 'icon-shop' -%}
+			{%- when 'sync' -%}
+				{%- render 'icon-sync' -%}
+			{%- when 'target' -%}
+				{%- render 'icon-target' -%}
+			{%- when 'wallet' -%}
+				{%- render 'icon-wallet' -%}
+
+		{%- endcase -%}
+	{%- else -%}
+		<div class="icons-row__image">
+			<div class="icon-svg-placeholder">
+				{{- 'image' -}}
+			</div>
+		</div>
+	{%- endif -%}
+
+	{%- if title != blank -%}
+		<h3 class="icons-row__title">{{ title }}</h3>
+	{%- endif -%}
+
+	{%- if content != blank -%}
+		<p class="icons-row__content">{{ content }}</p>
+	{%- endif -%}
+</div>

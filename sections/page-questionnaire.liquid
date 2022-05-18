@@ -1,0 +1,532 @@
+<script>
+  window.addEventListener("load", function(event) {
+    var domaine = "http://127.0.0.1:9292";
+    window.history.replaceState({ }, '', domaine +'/pages/quizz');
+  });
+</script>
+
+{% if section.blocks.size > 0 %}
+{% assign steps = section.blocks | where: 'type', 'step' %}
+<style>
+</style>
+<script>
+  theme.questionnaireData = {};
+</script>
+<div class="steps-template" style="display:none!important;">
+  {% assign step_number = 0 %}
+    {% for block in section.blocks %}
+      {% assign next_index = forloop.index0 | plus: 1 %}
+      {% if block.type == 'step' %}
+        {% assign step_number = step_number | plus: 1 %}
+    	{% assign q_number = 0 %}
+    	{% unless forloop.first %}</div>{% endunless %}
+        <div class="questionnaire-area-step-{{step_number}}" data-step>
+            {% if block.settings.subtitle != blank %}
+             <div class="step-box step-box--info clearfix">
+                <div class="step-info">
+                  <div class="step-info-number">{% if step_number < 10 %}0{% endif %}{{step_number}}</div>
+                  <div class="step-info-text">{{block.settings.subtitle}}</div>
+                </div>
+             </div>
+            {% endif %}         
+      {% elsif block.type != 'color-palette' %}
+          {% assign q_number = q_number | plus:1 %}
+          <script>
+            theme.questionnaireData['box-{{step_number}}-{{q_number}}'] = {
+                                    q: {{ block.settings.title | json }},
+                                    a: null
+            };
+          </script>
+          <div class="step-box clearfix" data-id="box-{{step_number}}-{{q_number}}">
+            {% if block.settings.title != blank %}
+            <h2 class="question clearfix">{{ block.settings.title }}</h2>
+            {% endif %}
+            <ul class="answer-options grid--uniform row clearfix">   
+              {% for i in (1..12) %}
+              {% capture value %}answer_option_{{i}}_title{% endcapture %}
+              {% capture value_image %}answer_option_{{i}}_image{% endcapture %}
+              {% capture value_trigger %}answer_option_{{i}}_custom_trigger{% endcapture %}
+              {% if block.settings[value] != blank %}
+              <li class="answer-option column quarter">
+                {% if block.settings[value_image] %}
+                <div class="image-wrapper">
+                  {% render 'responsive-image', image: block.settings[value_image] %}
+                </div>
+                {% endif %}
+
+                {% assign nextStepParam = step_number %}
+                {% assign nextQuestionParam = q_number | plus:1 %}
+
+                {% if section.blocks[next_index].type == 'step' %}
+                  {% assign nextStepParam = step_number | plus:1 %}
+                  {% assign nextQuestionParam = 1 %}
+                {% endif %}
+
+                <a 
+                  onclick="updateUrl('{{ nextStepParam }}', '{{ nextQuestionParam }}')" 
+                  href="{% if block.settings[value_trigger] contains 'http' %}{{block.settings[value_trigger]}}{% else %}javascript:void(0);{% endif %}" 
+                  data-href="box-{% if block.settings[value_trigger] != blank %}{{block.settings[value_trigger] | replace:':','-' | strip}}{% else %}{% if section.blocks[next_index].type == 'step' %}{{step_number | plus:1}}-1{% else %}{{step_number}}-{{q_number | plus:1}}{% endif %}{% endif %}" 
+                  class="button js-answer-option{% if section.blocks[next_index].type == 'step' %} last-question{% endif %}">
+                  {{block.settings[value]}}
+                </a>
+                <script>
+                  function updateUrl(un, deux){
+                    var domaine = "https://organicbox.fr";
+                    window.history.replaceState({ }, '', domaine +'/pages/quizz/'+un+'-'+deux);
+                  }
+                </script>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+      {% else %}
+          {% assign q_number = q_number | plus:1 %}
+          <script>
+            theme.questionnaireData['box-{{step_number}}-{{q_number}}'] = {
+                                    q: {{ block.settings.title | json }},
+                                    a: null
+            };
+          </script>
+          <div class="step-box step-box--palette clearfix" data-id="box-{{step_number}}-{{q_number}}">
+            {% if block.settings.title != blank %}
+            <h2 class="question clearfix">{{ block.settings.title }}</h2>
+            {% endif %}
+            [color_palette]
+          </div>
+      {% endif %} 
+      {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+</div>
+<div class="completed-steps" style="display:none;">
+</div>
+<div class="questionnaire-area text-left">
+  <div class="questionnaire-area-header lazyload clearfix"{% if section.settings.heading_area_bg %} data-bgset="{% render 'bgset', image: section.settings.heading_area_bg %}"
+              data-sizes="auto"
+              data-parent-fit="cover"{% endif %}>
+    <div class="container">
+      <ul class="step-navigation row grid--uniform clearfix">
+        {% for step in steps %}
+        <li class="step-navigation--item column{% if steps.size == 4 %} quarter{% elsif steps.size == 3 %} third{% elsif steps.size == 2 %} half{% endif %}{% if forloop.first %} active{% endif %}">
+          <div class="heading-wrap">
+            <div class="heading-number">{% if forloop.index < 10 %}0{% endif %}{{forloop.index}}</div>
+            <div class="heading-text">{{step.settings.title}}</div>
+          </div>
+          <div class="progress-bar" style="width: 0%;"></div>
+         </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="questionnaire-area-content clearfix">
+    <div class="container" data-all-steps></div>
+  </div>
+</div>
+{% endif %}
+{% schema %}
+
+{
+    "name": "Questionnaire",
+    "class": "template--page-questionnaire",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Styling"
+        }, {
+            "type": "image_picker",
+            "id": "heading_area_bg",
+            "label": "Heading area background color"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "step",
+            "name": "Step",
+            "limit": 4,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading"
+                }, {
+                    "type": "richtext",
+                    "id": "subtitle",
+                    "label": "Subtitle"
+                }
+            ]
+        }, {
+            "type": "qa",
+            "name": "Question answer",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Question"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 1"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_1_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_1_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 2"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_2_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_2_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 3"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_3_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_3_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 4"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_4_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_4_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 5"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_5_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_5_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 6"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_6_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_6_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 7"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_7_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_7_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 8"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_8_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_8_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 9"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_9_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_9_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 10"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_10_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_10_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 11"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_11_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_11_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 12"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_12_title",
+                    "label": "Option title"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_12_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }
+            ]
+        }, {
+            "type": "qa-with-images",
+            "name": "Question answer - images",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Question"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 1"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_1_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_1_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_1_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 2"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_2_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_2_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_2_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 3"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_3_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_3_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_3_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 4"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_4_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_4_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_4_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 5"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_5_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_5_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_5_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 6"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_6_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_6_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_6_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 7"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_7_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_7_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_7_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 8"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_8_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_8_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_8_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 9"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_9_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_9_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_9_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 10"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_10_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_10_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_10_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 11"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_11_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_11_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_11_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }, {
+                    "type": "header",
+                    "content": "Answer option 12"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_12_title",
+                    "label": "Option title"
+                }, {
+                    "type": "image_picker",
+                    "id": "answer_option_12_image",
+                    "label": "Option image"
+                }, {
+                    "type": "text",
+                    "id": "answer_option_12_custom_trigger",
+                    "label": "Custom trigger",
+                    "info": "Next question will be triggered by default unless custom trigger is added here. Use format- {STEP NUMBER}:{QUESTION NUMBER} to trigger specific question upon selecting this value. For example if you like to trigger the 'third question' from 'first step' just write 1:3"
+                }
+            ]
+        }, {
+            "type": "color-palette",
+            "name": "Final step color palette",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "Quelle couleur aimeriez-vous avoir?"
+                }, {
+                    "type": "paragraph",
+                    "content": "Color palette content will be added here"
+                }
+            ]
+        }
+    ]
+}
+
+{% endschema %}

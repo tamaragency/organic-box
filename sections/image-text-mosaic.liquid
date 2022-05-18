@@ -1,0 +1,126 @@
+<div class="vitre_couleur_sec">
+  <div class="container">
+    <div class="vitre_couleur_holder">
+      <div class="vitre_couleur_left">
+        <div class="vitreimg">
+          <img src="{{ section.settings.left_image | img_url: '1024x1024' }}" 
+               alt="{{ section.settings.left_image.alt | escape }}" 
+               class="rimage__image hide-on-mobile">
+           <img src="{{ section.settings.left_image_mobi | img_url: '1024x1024' }}" 
+                alt="{{ section.settings.left_image_mobi.alt | escape }}" 
+                class="rimage__image hide-on-desk">
+        </div>
+      </div>
+      <div class="vitre_couleur_right">
+        {% if section.settings.title != "" %}
+        	<h2>{{ section.settings.title }}</h2>
+        {% endif %}
+        {% if section.settings.description != "" %}
+        	<p>{{ section.settings.description }}</p>
+        {% endif %}
+        <div class="btnholder">
+          {% if section.settings.button1_label != "" %}
+          <a class="btn" href="{{ section.settings.button1_link }}">{{ section.settings.button1_label }}<img alt="" src="https://cdn.shopify.com/s/files/1/0532/6598/9810/files/rightanglearr.png?v=1614883582" />
+          </a>
+          {% endif %}
+          {% if section.settings.button2_label != "" %}
+          <a class="btn" href="{{ section.settings.button2_link }}">{{ section.settings.button2_label }}</a>
+          {% endif %}
+        </div>
+        <div class="vitreimg">
+          <img src="{{ section.settings.right_image | img_url: '1024x1024' }}" 
+               alt="{{ section.settings.right_image.alt | escape }}" 
+               class="rimage__image hide-on-mobile">
+           <img src="{{ section.settings.right_image_mobi | img_url: '1024x1024' }}" 
+                alt="{{ section.settings.right_image_mobi.alt | escape }}" 
+                class="rimage__image hide-on-desk">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image Text Mosaic",
+    "class": "section-image-text_html",
+	"max_blocks": 9,
+    "settings": [
+      {
+      "type": "header",
+      "content": "Layout"
+      },
+      {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+      },
+      {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+      },
+      {
+      "type": "text",
+      "id": "button1_label",
+      "label": "1st Button Label"
+      },
+      {
+        "type": "url",
+        "id": "button1_link",
+        "label": "1st Button link"
+      },
+      {
+      "type": "text",
+      "id": "button2_label",
+      "label": "2nd Button Label"
+      },
+      {
+        "type": "url",
+        "id": "button2_link",
+        "label": "2nd Button link"
+      },
+      {
+        "type": "image_picker",
+        "id": "left_image",
+        "label": "Left Side Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "left_image_mobi",
+        "label": "Left Side Image for Mobile View"
+      },
+      {
+        "type": "image_picker",
+        "id": "right_image",
+        "label": "Right Side Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "right_image_mobi",
+        "label": "Right Side Image for Mobile View"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Text Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text_item",
+            "label": "Text Item"
+          }
+        ]
+      }
+    ],
+    "presets": [
+	    {
+        "name": "Image Text Mosaic",
+        "category": "Image",
+        "settings": {}
+      }
+    ]
+  }
+{% endschema %}
+

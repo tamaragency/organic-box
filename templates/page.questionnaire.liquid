@@ -1,0 +1,6 @@
+{% capture page_content %}{% section 'page-questionnaire' %}{% endcapture %}
+{% capture color_palette -%}{% section 'page-questionnaire-color-palette' %}{% endcapture %}
+{% assign color_palette = color_palette | replace: 'class="shopify-section"', 'class="shopify-section-inner"' | replace: 'data-shopify-editor-section', '' %}
+{{ page_content | replace: '[color_palette]', color_palette }}
+{% section 'page-questionnaire-summary-and-results' %}
+{% section 'page-questionnaire-modals' %}

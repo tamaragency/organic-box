@@ -1,0 +1,214 @@
+/* Custom CSS ~ Apps ~ Recharge */
+
+/* Prix */
+.product-area .product-area__details__header .product-area__row .product-area__col:nth-child(2) {
+    display: none!important;
+}
+
+/* Offre actif */
+.rc-template__button-group .rc-radio .rc-option--active {
+    box-shadow: none;
+    border: 3px solid #0B3127!important;
+}
+.rc-widget .rc-option--active .rc-option__text {
+    color: #fff!important;
+}
+.rc-option--active .rc-option__text:before {
+    content: "";
+    padding: 17.5px 30px;
+    background: #003328;
+    margin-bottom: -25px;
+    border-radius: 40px;
+    color: #fff;
+}
+
+/* Offre */
+.rc-radio {
+    border-radius: 10px!important;
+    display: initial!important;
+}
+.rc-template__button-group .rc-radio-group__options {
+    padding-top: 10px;
+}
+.rc-template__button-group .rc-radio {
+    box-shadow: none;
+    border: 1px solid #b6b6b6!important;
+    padding: 0px 20px!important;
+}
+.rc-widget .rc-option__text, .rc-widget .rc-option__discount {
+    padding-right: 0!important;
+    margin-top: -15px;
+}
+.rc-option__text {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px!important;
+    text-transform: initial!important;
+}
+.rc-option__text:before {
+    content: "";
+    padding: 17.5px 30px;
+    background: #fff;
+    margin-bottom: -25px;
+    border-radius: 40px;
+}
+.rc-template__button-group .rc-radio .rc-option__price {
+    display: flex!important;
+    flex-direction: column;
+    font-size: 18px!important;
+    margin-top: 0px!important;
+}
+
+/* Abonnement */
+.rc-option__discount {
+    display: none!important;
+}
+.rc-option__price .rc_widget__price .rc_widget__price--subsave {
+    display: none!important;
+}
+.rc-radio:first-child .rc-option__text:after {
+    content: url("//cdn.shopify.com/s/files/1/0532/6598/9810/files/Abonnement.png");
+    padding: 20px 0 10px;
+}
+.rc_widget__price--subsave:after {
+    content: "20% de réduction avec abonnement";
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 15px 20px 10px;
+    line-height: 15px;
+}
+
+/* Achat unique */
+.rc-radio:nth-child(2) .rc-option__text:after {
+    content: url("//cdn.shopify.com/s/files/1/0532/6598/9810/files/Achat_unique.png");
+    padding: 20px 0 10px;
+}
+
+/* Comment sa marche */
+div.rc_popup {
+    padding: 15px 0 0!important;
+}
+.rc_popup__hover svg {
+    display: none;
+}
+.rc_popup__label {
+    padding-left: 0!important;
+    font-size: 14px;
+}
+
+/* Pop-up */
+.rc_popup__block {
+    padding: 20px!important;
+    border-radius: 0 40px!important;
+    border-bottom: 3px solid #e1b2a5;
+}
+.rc_popup__block__content br {
+    display: none!important;
+}
+.rc_popup__hover a {
+    color: #e1b2a5!important;
+	font-weight: bold;
+}
+div.rc_popup__hover, a.rc_popup__hover, .rc_popup__block__content {
+    padding-bottom: 0!important;
+}
+.rc_popup__block__footer {
+    display: none!important;
+}
+
+/* Livraison */
+.rc-selling-plans__label {
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: initial;
+    width: auto;
+    padding-right: 15px;
+    display: inline-flex;
+}
+.rc-selling-plans select {
+    color: #0b3127;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 40px;
+    border-color: #0B3127!important;
+    width: 75%;
+}
+.rc-template__button-group .rc-radio-group__options+.rc-selling-plans {
+    margin-top: 20px!important;
+}
+
+/* Variantes (Quantité) */
+.clickyboxes {
+    font-size: 14px;
+}
+.clickyboxes a {
+    line-height: 30px!important;
+}
+
+/* Quantité + Bouton */
+.product-detail__form__options.product-detail__form__options--underlined {
+    margin-top: 0px!important;
+}
+/* Quantité */
+.quantity-wrapper {
+    display: none;
+}
+/* Bouton */
+.product-detail__form__action.with-store-availability {
+    margin: 10px 0 0!important;
+}
+.product-detail__form__action button {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* ------------------------------------ */
+/* Responsive */
+/* ------------------------------------ */
+@media screen and (min-width: 1024px) {
+  /* Abonnement */
+  .rc_widget__price--subsave:after {
+      padding: 15px 15px 10px;
+  }
+}
+/* Tablette */
+@media screen and (max-width: 1023px) {
+  /* Titre */
+  .product-area .product-area__details__header {
+    padding: 0!important;
+  }
+  /* Offre */
+  .product-area .product-area__details {
+    padding-bottom: 0px!important;
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+  }
+  /* Abonnement */
+  .rc_widget__price--subsave:after {
+      padding: 15px 0 10px;
+  }
+}
+/* Mobile */
+@media screen and (max-width: 767px) {
+  /* Container */
+  .product-area .product-area__details {
+    padding: 20px 0px 0!important;
+  }
+  /* Titre */
+  .product-area .product-area__details__header {
+    padding: 15px 0 0!important;
+  }
+  .product-area .product-area__details__header .product-area__row {
+    justify-content: center;
+  }
+  /* Offre */
+  .product-area .product-area__details .product-area__details__inner {
+    padding-bottom: 50px!important;
+    padding-left: 20px!important;
+    padding-right: 20px!important;
+  }
+  /* Abonnement */
+  .rc_widget__price--subsave:after {
+      padding: 15px 5px 10px;
+  }
+}

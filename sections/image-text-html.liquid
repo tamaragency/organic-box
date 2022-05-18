@@ -1,0 +1,92 @@
+<div class="que_box_sec">
+  <div class="container">
+      {% if section.settings.title != "" %}
+      <h2>{{ section.settings.title }}</h2>
+      {% endif %}
+    <div class="que_box_holder">
+      <div class="que_box_left">
+        <ul class="que_list hide-on-mobile">
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <li class="item">
+              <span class="no">0{{ forloop.index }}</span>
+              <span class="text">{{ block.settings.text_item }}</span>
+            </li>
+          {% endfor %}
+        {% endif %}
+        </ul>
+        
+        <div class="que_list que_list_mob owl-carousel owl-theme hide-on-desk">
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <div class="item">
+              <span class="no">0{{ forloop.index }}</span>
+              <span class="text">{{ block.settings.text_item }}</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+        </div>
+      </div>
+      <div class="que_box_right"> 
+        <div class="que_box_img">
+          <img src="{{ section.settings.image | img_url: '1024x1024' }}" 
+               alt="{{ section.settings.image.alt | escape }}" 
+               class="rimage__image hide-on-mobile">
+           <img src="{{ section.settings.mobile_image | img_url: '1024x1024' }}" 
+                alt="{{ section.settings.mobile_image.alt | escape }}" 
+                class="rimage__image hide-on-desk">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image Text HTML",
+    "class": "section-image-text_html",
+	"max_blocks": 9,
+    "settings": [
+      {
+      "type": "header",
+      "content": "Layout"
+      },
+      {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "mobile_image",
+        "label": "Image for Mobile View"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text",
+        "name": "Text Item",
+        "settings": [
+          {
+            "type": "text",
+            "id": "text_item",
+            "label": "Text Item"
+          }
+        ]
+      }
+    ],
+    "presets": [
+	    {
+        "name": "Image Text HTML",
+        "category": "Image",
+        "settings": {}
+      }
+    ]
+  }
+{% endschema %}
+

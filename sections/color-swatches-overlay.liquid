@@ -1,0 +1,108 @@
+
+<div class="color-palette__consultation-overlay color-palette--active">
+  <div class="color-palette__consultation-overlay__container">
+    <div class="color-palette__consultation-overlay__close-cta close--icon">
+      {% render 'icon-close' %}
+    </div>
+    {% if section.settings.selected_color_palette_overlay_title != blank %}
+      <div class="color-palette__consultation-overlay__title">
+        {{ section.settings.selected_color_palette_overlay_title }}
+      </div>
+    {% endif %}
+    <div class="color-palette__consultation-overlay__content__container">
+      <div class="color-palette__consultation-overlay__image"></div>
+      <div class="color-palette__consultation-overlay__text-content">
+        <div class="questionnaire_step_number_text"></div>
+        <div class="selected-color-palette--category"></div>
+        <div class="selected-color-palette--title"></div>
+        {% if section.settings.color_swatch_sector_cta != blank %}
+          <button class="color-palette__consultation-overlay__end-result-cta button">{{ section.settings.color_swatch_sector_cta }}</button>
+        {% endif %}
+      
+        {% if section.settings.color_swatch_back_to_chart_cta != blank %}
+          <button class="color-palette__consultation-overlay__close-cta button">{{ section.settings.color_swatch_back_to_chart_cta }}</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="color-palette__consultation-overlay color-palette--inactive">
+  <div class="color-palette__consultation-overlay__container">
+    <div class="color-palette__consultation-overlay__close-cta close--icon">
+      {% render 'icon-close' %}
+    </div>
+
+    {% if section.settings.section_text != blank %}
+      <div class="color-palette__consultation-overlay__text-content">
+        {{ section.settings.section_text }}
+      </div>
+    {% endif %}
+
+    <div class="color-palette__consultation-overlay__ctas">
+      {% if section.settings.consulation_cta != blank %}
+        <a href="{{ section.settings.consultation_cta_url }}" class="color-palette__consultation-overlay__consltation-cta button">{{ section.settings.consulation_cta }}</a>            
+      {% endif %}
+      {% if section.settings.back_to_chart_cta != blank %}
+        <a href="javascript:void(0)" class="color-palette__consultation-overlay__close-cta button">{{ section.settings.back_to_chart_cta }}</a>  
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Color Swatches Overlay",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Active Color Swatches Overlay"
+      },
+      {
+        "type": "text",
+        "id": "selected_color_palette_overlay_title",
+        "label": "Selected Color Palette Ovelay Title",
+       "default": "Votre couleur sélectionnée"
+      },
+      {
+        "type": "text",
+        "id": "color_swatch_sector_cta",
+        "label": "Color Swatch Selector CTA Text",
+        "default": "Sélectionnez ce résultat final"
+      },
+      {
+        "type": "text",
+        "id": "color_swatch_back_to_chart_cta",
+        "label": "Back to Chart CTA",
+        "default": "Retour au graphique"
+      },
+      {
+        "type": "header",
+        "content": "Inactive Color Swatches Overlay"
+      },
+      {
+        "type": "richtext",
+        "id": "section_text",
+        "label": "Overlay Text Message",
+        "default": "<p>Aller plus clair que cela pourrait vous donner des résultats cuivrés qui pourraient ne pas compléter votre teint. Si vous voulez être plus léger que ce que vous voyez ici, continuez avec une consultation avec un coloriste.</p>"
+      },
+      {
+        "type": "text",
+        "id": "consulation_cta",
+        "label": "Consultation CTA Text",
+        "default": "Démarrer la consultation vidéo"
+      },
+      {
+        "type": "url",
+        "id": "consultation_cta_url",
+        "label": "Consultation CTA URL"
+      },
+      {
+        "type": "text",
+        "id": "back_to_chart_cta",
+        "label": "Back to Chart CTA",
+        "default": "Retour au graphique"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,146 @@
+{% comment %}
+Icons row
+{% endcomment %}
+
+{%- assign background = section.settings.color_icons_bg -%}
+{%- assign color = section.settings.color_icons_text -%}
+{%- assign alignment = section.settings.alignment -%}
+<style>
+  .icons-row [data-section-id="{{ section.id }}"] { color: {{ color }}; }
+  .icons-row [data-section-id="{{ section.id }}"] .icons-row__item .icon path { fill: {{ color }}; }
+  .icons-row [data-section-id="{{ section.id }}"] .icons-row--background { background-color: {{ background }}; }
+</style>
+
+{%- if section.blocks.size > 0 -%}
+<section data-section-id="{{ section.id }}" data-section-type="icons-row">
+  <div class="icons-row--background pad-sm">
+    <div class="container">
+  	  <div class="custom-devider-2"></div>
+      <div class="row">
+        <div class="icons-row-wrapper icons-row-wrapper--{{ alignment }}">
+          {%- for block in section.blocks -%}
+            {%- assign title = block.settings.title -%}
+            {%- assign content = block.settings.content -%}
+            {%- assign image = block.settings.icon_image -%}
+            {%- assign icon = block.settings.icon_name -%}
+
+            {%- render 'icons-row__item', title: title, content: content, image: image, icon: icon -%}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Icons row",
+  "max_blocks": 6,
+  "class": "shopify-section--icons-row icons-row",
+  "settings": [
+    {
+			"type": "header",
+			"content": "Layout"
+		},
+    {
+			"type": "select",
+			"id": "alignment",
+			"label": "Alignment",
+      "default": "center",
+			"options": [
+				{ "label": "Center", "value": "center" },
+				{ "label": "Left", "value": "left" }
+			]
+    },
+    {
+			"type": "header",
+			"content": "Colors"
+		},
+    {
+      "type": "color",
+      "id": "color_icons_bg",
+      "label": "Background color",
+      "default": "#fafafa"
+    },
+    {
+      "type": "color",
+      "id": "color_icons_text",
+      "label": "Text color",
+      "default": "#333"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_name",
+          "label": "Icon",
+          "default": "shop",
+          "options": [
+            { "value": "award", "label": "Award" },
+            { "value": "basket", "label": "Basket" },
+            { "value": "ball", "label": "Ball" },
+            { "value": "calendar", "label": "Calendar" },
+            { "value": "camera", "label": "Camera" },
+            { "value": "comment", "label": "Comment" },
+            { "value": "data", "label": "Data" },
+            { "value": "dollar", "label": "Dollar" },
+            { "value": "email", "label": "Email" },
+            { "value": "eye", "label": "Eye" },
+            { "value": "fruits", "label": "Fruits" },
+            { "value": "house", "label": "House" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "money", "label": "Money" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "reload", "label": "Reload" },
+            { "value": "shop", "label": "Shop" },
+            { "value": "sync", "label": "Sync" },
+            { "value": "target", "label": "Target" },
+            { "value": "wallet", "label": "Wallet" },
+						{ "value": "none", "label": "None" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon image",
+          "info": "If image set it will override the icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Content",
+          "default": "Modular is a powerful Shopify theme that will set you apart from the rest with Mosaic, Image with text, and Slideshow sections."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icons row",
+      "category": "Text",
+      "blocks": [
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

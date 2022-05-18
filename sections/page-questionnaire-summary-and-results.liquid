@@ -1,0 +1,225 @@
+<script>
+  theme.questionnaireResults = {};
+  theme.questionnaireResults.qLabel = {% if section.settings.summary_question_label != blank %}{{section.settings.summary_question_label | json}}{% else %}'Question: '{% endif %};
+  theme.questionnaireResults.aLabel = {% if section.settings.summary_answer_label != blank %}{{section.settings.summary_answer_label | json}}{% else %}'Answer: '{% endif %};
+  theme.questionnaireResults.offers = [];
+  {% for block in section.blocks %}
+    {% if block.settings.product != blank and all_products[block.settings.product] != empty %}
+      var offerObj = {
+        qaCombinations: {% if block.settings.qa_conbinations != blank %}{{ block.settings.qa_conbinations | replace: ':','-' | replace: ' ,',',' | replace: ', ',',' | replace: ' , ',',' | split: ',' | json }}{% else %}[]{% endif %},
+        product: {{all_products[block.settings.product] | json}}
+      };
+   	  theme.questionnaireResults.offers.push(offerObj);
+    {% endif %}
+  {% endfor %}
+</script>
+<div class="questionnaire-summary" style="display:none;">
+  <div class="container">
+  {% if section.settings.summary_heading != blank %}
+  	<div class="heading-area">
+      <h2>{{section.settings.summary_heading}}</h2>
+  	</div>
+  {% endif %}
+  <div class="qa-content-area js-insert-qa"></div>
+  <div class="confirmation-area">
+    {% if section.settings.summary_confirmation_message != blank %}
+    <div class="confirmation-message">{{section.settings.summary_confirmation_message }}</div>
+    {% endif %}
+    <div class="confirmation-buttons">
+      <ul class="button-group grid--uniform row clearfix">
+        {%- for i in (1..6) -%}
+        {%- capture btn_text -%}summary_button_{{i}}_text{%- endcapture -%}
+        {%- capture btn_link -%}summary_button_{{i}}_link{%- endcapture -%}
+          {%- if section.settings[btn_text] != blank -%}
+            <li class="column third">
+              <a class="button btn{% if i == 2 %} resume-quiz{% endif %}" {% if i == 1 %} onclick="updateUrlDeux('diagnostic')" {% endif %}  href="{% if i == 1 %}#show-results{% elsif i == 2 %}#resume_quiz{% else %}{{section.settings[btn_link]}}{% endif %}">{{ section.settings[btn_text] }}</a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+
+        <script>
+          function updateUrlDeux(param){
+            var domaine = "https://organicbox.fr";
+            window.history.replaceState({ }, '', domaine +'/pages/quizz/'+param);
+          }
+        </script>
+      </ul>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="questionnaire-results" style="display:none;">
+  <div class="container">
+    {% if section.settings.results_heading != blank %}
+      <div class="heading-area">
+        <h2>{{section.settings.results_heading}}</h2>
+      </div>
+    {% endif %}
+    <div class="grid--uniform row clearfix">
+      <div class="column half offer-area">
+        {% if section.settings.results_offer_area_heading != blank %}
+        <h4 class="offer-area-heading">{{section.settings.results_offer_area_heading}}</h4>
+        {% endif %}
+        {% if section.settings.results_offer_area_content != blank %}
+        <div class="offer-area-heading">{{section.settings.results_offer_area_content}}</div>
+        {% endif %}
+        <div class="offer-area-product-info js-insert-product-info"></div>
+        {% if section.settings.results_offer_area_button_text != blank %}
+        <div class="offer-area-button-wrapper">
+          <a class="button btn offer-btn" href="javascript:void(0);">{{ section.settings.results_offer_area_button_text }}</a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="column half consultation-area">
+        {% if section.settings.results_consultation_area_heading != blank %}
+        <h4 class="consultation-area-heading">{{section.settings.results_consultation_area_heading}}</h4>
+        {% endif %}
+        {% if section.settings.results_consultation_area_content != blank %}
+        <div class="consultation-area-heading">{{section.settings.results_consultation_area_content}}</div>
+        {% endif %}
+        {% if section.settings.results_consultation_area_button_text != blank and section.settings.results_consultation_area_button_link != blank %}
+        <div class="consultation-area-button-wrapper">
+          <a class="button btn" href="{{section.settings.results_consultation_area_button_link}}">{{ section.settings.results_consultation_area_button_text }}</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Summary and Results",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Summary page"
+      },
+	  {
+        "type": "textarea",
+        "id": "summary_heading",
+        "label": "Heading",
+		"default": "Voici les réponses que vous avez données:"
+      },
+      {
+        "type": "text",
+        "id": "summary_question_label",
+        "label": "Question label",
+		"default": "Q: "
+      },
+	  {
+        "type": "text",
+        "id": "summary_answer_label",
+        "label": "Answer label",
+		"default": "A: "
+      },
+	  {
+        "type": "textarea",
+        "id": "summary_confirmation_message",
+        "label": "Confirmation message",
+		"default": "Confirmez-vous?"
+      },
+	  {
+        "type": "text",
+        "id": "summary_button_1_text",
+        "label": "Confirmation - Yes button text",
+		"default": "Oui"
+      },
+	  {
+        "type": "text",
+        "id": "summary_button_2_text",
+        "label": "Confirmation - No button text",
+		"default": "Non. Revenir au quiz"
+      },
+	  {
+        "type": "text",
+        "id": "summary_button_3_text",
+        "label": "Additional button text",
+		"default": "Consulter un expert"
+      },
+	  {
+        "type": "url",
+        "id": "summary_button_3_link",
+        "label": "Additional button link"
+      },
+	  {
+        "type": "header",
+        "content": "Results page"
+      },
+	  {
+        "type": "text",
+        "id": "results_heading",
+        "label": "Results heading",
+		"default": "Results"
+      },
+	  {
+        "type": "paragraph",
+        "content": "Offer area"
+      },
+	  {
+        "type": "text",
+        "id": "results_offer_area_heading",
+        "label": "Offer heading",
+		"default": "Offrir un produit"
+      },
+	  {
+        "type": "richtext",
+        "id": "results_offer_area_content",
+        "label": "Offer text content",
+		"default": "<p>C'est le meilleur produit selon les options que vous avez sélectionnées</p>"
+      },
+	  {
+        "type": "text",
+        "id": "results_offer_area_button_text",
+        "label": "Offer button text",
+		"default": "Aller au produit"
+      },
+	  {
+        "type": "paragraph",
+        "content": "Consultation area"
+      },
+	  {
+        "type": "text",
+        "id": "results_consultation_area_heading",
+        "label": "Consultation heading",
+		"default": "Consulter un expert"
+      },
+	  {
+        "type": "richtext",
+        "id": "results_consultation_area_content",
+        "label": "Consultation text content",
+		"default": "<p>Participez à la session d'appel vidéo avec notre expert</p>"
+      },
+	  {
+        "type": "text",
+        "id": "results_consultation_area_button_text",
+        "label": "Consultation button text",
+		"default": "Consultez maintenant"
+      },
+	  {
+        "type": "url",
+        "id": "results_consultation_area_button_link",
+        "label": "Consultation button link"
+      }
+    ],
+	"max_blocks": 4,
+	"blocks": [
+      {
+        "type": "offer-product",
+        "name": "Offer product",
+        "settings": [
+          {
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+          },
+		  {
+            "type": "textarea",
+            "id": "qa_conbinations",
+            "label": "QA combinations",
+			"info": "Enter a comma(,) separated list of question-answer combination. Use format- {STEP NUMBER}:{QUESTION NUMBER}:{ANSWER OPTION NUMBER}. For example if you like to show this product in results for the 'second question' from 'third step' with 'second answer option' as answer just write 3:2:2"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
