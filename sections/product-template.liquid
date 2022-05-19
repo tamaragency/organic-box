@@ -16,6 +16,9 @@
   const from_quizz = urlParams.get('from_quizz')
   if (from_quizz == "true") {
     document.querySelector('.questionnaire-results').style.display = "block";
+    
+    document.querySelector('.brand').style.display = "none";
+    document.querySelector('.product-area .product-area__details__header').style.border ="none"
   }
 
   const cheveux_long = urlParams.get('cheveux_long');
@@ -43,7 +46,7 @@
     document.querySelector('.cc-hover-line').style.display = "none"
     document.querySelector('.opt--classique-60gr' + version).parentNode.style.display = "none";
     document.querySelector('.opt--cheveux-longs-120gr' + version).parentNode.style.display = "block";
-    document.querySelectorAll('.offer-area-heading')[1].innerHTML += '<p>• Pour vos cheveux longs, on recommande <u>120 grammes de coloration</u>.</p>'
+    document.querySelector('.offer-area-heading2').innerHTML += '<p>Pour vos cheveux longs, on recommande <u>120 grammes de coloration</u>.</p>'
   }
 
   function display60g(version) {
@@ -51,13 +54,13 @@
     document.querySelector('.cc-hover-line').style.display = "none"
     document.querySelector('.opt--classique-60gr' + version).parentNode.style.display = "block";
     document.querySelector('.opt--cheveux-longs-120gr' + version).parentNode.style.display = "none";
-    document.querySelectorAll('.offer-area-heading')[1].innerHTML += '<p>• Pour vos cheveux courts, <u>60 grammes de coloration</u> suffisent.</p>'
+    document.querySelector('.offer-area-heading2').innerHTML += '<p>Pour vos cheveux courts, <u>60 grammes de coloration</u> suffisent.</p>'
   }
 
   const cheveux_blanc = urlParams.get('cheveux_blanc');
 
   if (cheveux_blanc == "true") {
-    document.querySelectorAll('.offer-area-heading')[1].innerHTML += '<p>• Avec les cheveux blanc, on vous recommande <u>une box 2 passages</u>. Cela permet à la couleur de tenir sur vos cheveux.</p>'
+    document.querySelector('.offer-area-heading2').innerHTML += '<p>Pour vos cheveux blanc, on vous recommande <u>une box 2 passages</u>.</p>'
   }
 
   function waitForElm(selector) {

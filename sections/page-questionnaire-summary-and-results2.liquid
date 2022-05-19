@@ -50,7 +50,7 @@
   </div>
   </div>
 </div>
-<div class="questionnaire-results" style="display:none;">
+<div class="questionnaire-results questionnaire-results2" style="display:none;">
   <div class="container">
     {% if section.settings.results_heading != blank %}
       <div class="heading-area">
@@ -58,36 +58,78 @@
       </div>
     {% endif %}
     <div class="grid--uniform row clearfix">
-      <div class="column half offer-area">
+      <div class="offer-area">
         {% if section.settings.results_offer_area_heading != blank %}
-        <h4 class="offer-area-heading">{{section.settings.results_offer_area_heading}}</h4>
+        <!-- <h4 class="offer-area-heading">{{section.settings.results_offer_area_heading}}</h4> -->
         {% endif %}
         {% if section.settings.results_offer_area_content != blank %}
-        <div class="offer-area-heading">{{section.settings.results_offer_area_content}}</div>
-        {% endif %}
-        <div class="offer-area-product-info js-insert-product-info"></div>
-        {% if section.settings.results_offer_area_button_text != blank %}
-        <!-- <div class="offer-area-button-wrapper">
-          <a class="button btn offer-btn" href="javascript:void(0);">{{ section.settings.results_offer_area_button_text }}</a>
-        </div> -->
-        {% endif %}
-      </div>
-      <div class="column half consultation-area">
-        {% if section.settings.results_consultation_area_heading != blank %}
-        <h4 class="consultation-area-heading">{{section.settings.results_consultation_area_heading}}</h4>
-        {% endif %}
-        {% if section.settings.results_consultation_area_content != blank %}
-        <div class="consultation-area-heading">{{section.settings.results_consultation_area_content}}</div>
-        {% endif %}
-        {% if section.settings.results_consultation_area_button_text != blank and section.settings.results_consultation_area_button_link != blank %}
-        <div class="consultation-area-button-wrapper">
-          <a class="button btn" href="{{section.settings.results_consultation_area_button_link}}">{{ section.settings.results_consultation_area_button_text }}</a>
-        </div>
+        <div class="offer-area-heading2"></div>
+        <div class="offer-area-heading">
+          {{section.settings.results_offer_area_content}}
+
+          <p>Vous avez des doutes sur les réponses ? <span class="btnLinkExpert">Consultez un expert.</span></p>
+          <div class="expertContainer">
+            {% if section.settings.results_consultation_area_content != blank %}
+              <div class="consultation-area-heading">{{section.settings.results_consultation_area_content}}</div>
+            {% endif %}
+            {% if section.settings.results_consultation_area_button_text != blank and section.settings.results_consultation_area_button_link != blank %}
+              <div class="consultation-area-button-wrapper">
+                <a class="button btn" href="{{section.settings.results_consultation_area_button_link}}">{{ section.settings.results_consultation_area_button_text }}</a>
+              </div>
+            {% endif %}
+          </div>
+
+          <b>{{section.settings.results_offer_area_content2}}</b>
+        </div> 
+        
         {% endif %}
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .questionnaire-results2 .container {
+    border: 1px solid #b6b6b6!important;
+    border-radius: 10px;
+    max-width: 1100px;
+    padding: 10px;
+  }
+
+  .questionnaire-results2 .container .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .questionnaire-results2 .offer-area-heading, .questionnaire-results2 .consultation-area-heading, .offer-area {
+    text-align: center;
+  }
+  
+  .btnLinkExpert {
+    color: #e1b2a5;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .expertContainer {
+    display: none;
+  }
+
+  .expertContainer.activeExpert {
+    display: block;
+    background-color: #F4F4F4;
+    padding: 10px;
+    border-radius: 10px;
+  }
+</style>
+
+<script>
+  document.querySelector('.btnLinkExpert').addEventListener("click", () => {
+    document.querySelector('.expertContainer').classList.toggle("activeExpert")
+  })
+</script>
+
 {% schema %}
   {
     "name": "Summary and Results",
@@ -151,7 +193,7 @@
         "type": "text",
         "id": "results_heading",
         "label": "Results heading",
-		    "default": "Bravo ! On a trouvé exactement le produit qu'il vous faut"
+		    "default": "Bravo ! On a trouvé exactement ce qu'il vous faut"
       },
 	  {
         "type": "paragraph",
@@ -163,12 +205,18 @@
         "label": "Offer heading",
 		    "default": "Nous allons pouvoir préparer votre coloration végétale :"
       },
-	  {
-        "type": "richtext",
-        "id": "results_offer_area_content",
-        "label": "Offer text content",
-		    "default": "<p>Grâce aux réponses de votre diagnostic, notre équipe d'expert·e·s va pouvoir préparer votre coloration végétale sur-mesure.<br><br>Commandez-la dès maintenant pour conserver le résultat de votre diagnostic !</p>"
-      },
+      {
+          "type": "richtext",
+          "id": "results_offer_area_content",
+          "label": "Offer text content",
+          "default": "<p>Grâce à vos réponses, nous allons préparer votre coloration végétale sur-mesure.</p>"
+        },
+        {
+            "type": "richtext",
+            "id": "results_offer_area_content2",
+            "label": "Offer text content 2",
+            "default": "<p>↓ Commandez-la dès maintenant ↓</p>"
+          },
 	  {
         "type": "text",
         "id": "results_offer_area_button_text",
