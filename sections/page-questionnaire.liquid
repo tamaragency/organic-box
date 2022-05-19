@@ -1,6 +1,7 @@
 <script>
   window.addEventListener("load", function(event) {
-    var domaine = "http://127.0.0.1:9292";
+    // var domaine = "http://127.0.0.1:9292";
+    var domaine = "https://organicbox.fr";
     window.history.replaceState({ }, '', domaine +'/pages/quizz');
   });
 </script>
@@ -71,6 +72,7 @@
                 </a>
                 <script>
                   function updateUrl(un, deux){
+                    // var domaine = "http://127.0.0.1:9292";
                     var domaine = "https://organicbox.fr";
                     window.history.replaceState({ }, '', domaine +'/pages/quizz/'+un+'-'+deux);
                   }

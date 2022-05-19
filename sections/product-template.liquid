@@ -9,6 +9,78 @@
 </div>
 <br/>
 
+<script>
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const from_quizz = urlParams.get('from_quizz')
+  if (from_quizz == "true") {
+    document.querySelector('.questionnaire-results').style.display = "block";
+  }
+
+  const cheveux_long = urlParams.get('cheveux_long');
+
+  waitForElm('.opt--cheveux-longs-120gr').then((elm) => {
+    if (cheveux_long == "true") {
+      display120g("")
+    }
+    if (cheveux_long == "false") {
+      display60g("")
+    }
+  });
+
+  waitForElm('.opt--cheveux-longs-120gr-x2').then((elm) => {
+    if (cheveux_long == "true") {
+      display120g("-x2")
+    }
+    if (cheveux_long == "false") {
+      display60g("-x2")
+    }
+  });
+
+  function display120g(version) {
+    document.querySelector('.opt--cheveux-longs-120gr' + version).click()
+    document.querySelector('.cc-hover-line').style.display = "none"
+    document.querySelector('.opt--classique-60gr' + version).parentNode.style.display = "none";
+    document.querySelector('.opt--cheveux-longs-120gr' + version).parentNode.style.display = "block";
+    document.querySelectorAll('.offer-area-heading')[1].innerHTML += '<p>• Pour vos cheveux longs, on recommande <u>120 grammes de coloration</u>.</p>'
+  }
+
+  function display60g(version) {
+    document.querySelector('.opt--classique-60gr' + version).click()
+    document.querySelector('.cc-hover-line').style.display = "none"
+    document.querySelector('.opt--classique-60gr' + version).parentNode.style.display = "block";
+    document.querySelector('.opt--cheveux-longs-120gr' + version).parentNode.style.display = "none";
+    document.querySelectorAll('.offer-area-heading')[1].innerHTML += '<p>• Pour vos cheveux courts, <u>60 grammes de coloration</u> suffisent.</p>'
+  }
+
+  const cheveux_blanc = urlParams.get('cheveux_blanc');
+
+  if (cheveux_blanc == "true") {
+    document.querySelectorAll('.offer-area-heading')[1].innerHTML += '<p>• Avec les cheveux blanc, on vous recommande <u>une box 2 passages</u>. Cela permet à la couleur de tenir sur vos cheveux.</p>'
+  }
+
+  function waitForElm(selector) {
+    return new Promise(resolve => {
+      if (document.querySelector(selector)) {
+        return resolve(document.querySelector(selector));
+      }
+
+      const observer = new MutationObserver(mutations => {
+        if (document.querySelector(selector)) {
+          resolve(document.querySelector(selector));
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    });
+  }
+</script>
+
   {% schema %}
   {
     "name": "Product pages",

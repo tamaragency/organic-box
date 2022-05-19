@@ -1,5 +1,3 @@
-console.log("questionnaire");
-
 jQuery(function($){
   theme.questionnaire = (function(){
     function Questionnaire(){
@@ -59,12 +57,13 @@ jQuery(function($){
           }
         });
         $(document).on('click', '.color-palette__consultation-overlay__end-result-cta', function(){
-          // var domaine = "http://127.0.0.1:9292";
-          var domaine = "https://organicbox.fr";
-          window.history.replaceState({ }, '', domaine +'/pages/quizz/resume');
+            // var domaine = "http://127.0.0.1:9292";
+            var domaine = "https://organicbox.fr";
+            window.history.replaceState({ }, '', domaine +'/pages/quizz/resume');
 
             theme.questionnaireData[questionnaire_title_id].a = questionnaire_title_handle
-            _this._showSummary();
+            // _this._showSummary();
+            _this._showOffer();
             $('.color-palette__consultation-overlay').removeClass('active');
         })
       },
@@ -111,7 +110,7 @@ jQuery(function($){
           var paletteQ1String = $stepBox.find('.color-palette').data('questions').split(',')[0];
           var paletteQ2String = $stepBox.find('.color-palette').data('questions').split(',')[1];
           var combinationString = theme.questionnaireData[paletteQ1String].a.split('.')[1].trim()+'+'+theme.questionnaireData[paletteQ2String].a.split('.')[1].trim();
-          console.log(combinationString);
+          // console.log(combinationString);
           if(combinationString) this._showActiveShades(combinationString);
         }
         var questionHtml = $stepBox[0].outerHTML;
@@ -244,26 +243,43 @@ jQuery(function($){
             }
           }
         });
-        console.log(offerProduct);
+        var paramCheveuxLong = "&cheveux_long=true"
+        if(theme.questionnaireData['box-2-1'].a.trim() == "Mi-longs" || theme.questionnaireData['box-2-1'].a.trim() == "Courts") {
+          var paramCheveuxLong = "&cheveux_long=false"
+        }
+
+        var paramCheveuxBlanc = "&cheveux_blanc=true"
+        if(theme.questionnaireData['box-3-1'].a.trim() == "Non") {
+          var paramCheveuxBlanc = "&cheveux_blanc=false"
+        }
+        
         if(offerProduct){
           theme.questionnaireData.offerProductHandle = offerProduct.handle;
           window.localStorage.setItem('questionnaire-data', JSON.stringify(theme.questionnaireData));
-          productInfoTemplate += '<div class="product-details">';
-          if(offerProduct.featured_image != null){
-            productInfoTemplate += '<div class="image-wrapper"><img src="'+offerProduct.featured_image+'" /></div>';
-          }
-          productInfoTemplate += '<h6 class="title">'+offerProduct.title+'</h6>';
-          productInfoTemplate += '<p class="price"><span class="theme-money">' + theme.Shopify.formatMoney(offerProduct.price, theme.money_format) + '</span></p>';
-          productInfoTemplate += '</div>';
-          $(document).find('.js-insert-product-info').html(productInfoTemplate);
-          $(document).find('.offer-area .offer-btn').attr('href', '/products/'+offerProduct.handle);
+          // productInfoTemplate += '<div class="product-details">';
+          // if(offerProduct.featured_image != null){
+          //   productInfoTemplate += '<div class="image-wrapper"><img src="'+offerProduct.featured_image+'" /></div>';
+          // }
+          // productInfoTemplate += '<h6 class="title">'+offerProduct.title+'</h6>';
+          // productInfoTemplate += '<p class="price"><span class="theme-money">' + theme.Shopify.formatMoney(offerProduct.price, theme.money_format) + '</span></p>';
+          // productInfoTemplate += '</div>';
+          // $(document).find('.js-insert-product-info').html(productInfoTemplate);
+          // $(document).find('.offer-area .offer-btn').attr('href', '/products/'+offerProduct.handle);
+          
+
+          var targetURL = '/products/'+offerProduct.handle+"?from_quizz=true"+paramCheveuxLong+paramCheveuxBlanc;
+          window.location.href = targetURL;
         } else {
           $(document).find('.offer-area .offer-btn').hide();
         }
-        $(document).find('.questionnaire-summary').removeClass('showing');
-        $(document).find('.questionnaire-summary').fadeOut();
-        $(document).find('.questionnaire-results').fadeIn();
-        $("html, body").animate({ scrollTop: 0 }, 500);
+        // $(document).find('#shopify-section-page-questionnaire').fadeOut();
+        // $(document).find('.questionnaire-summary').fadeIn();
+        // $(document).find('.questionnaire-summary').addClass('showing');
+
+        // $(document).find('.questionnaire-summary').removeClass('showing');
+        // $(document).find('.questionnaire-summary').fadeOut();
+        // $(document).find('.questionnaire-results').fadeIn();
+        // $("html, body").animate({ scrollTop: 0 }, 500);
       },
       _insertPropertyInputs: function(){
         if(window.location.href.indexOf('/products/') < 0 || $(document).find('.js-product-form').length == 0) return;

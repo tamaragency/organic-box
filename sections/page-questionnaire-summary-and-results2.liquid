@@ -13,6 +13,7 @@
     {% endif %}
   {% endfor %}
 </script>
+
 <div class="questionnaire-summary" style="display:none;">
   <div class="container">
   {% if section.settings.summary_heading != blank %}
@@ -66,9 +67,9 @@
         {% endif %}
         <div class="offer-area-product-info js-insert-product-info"></div>
         {% if section.settings.results_offer_area_button_text != blank %}
-        <div class="offer-area-button-wrapper">
+        <!-- <div class="offer-area-button-wrapper">
           <a class="button btn offer-btn" href="javascript:void(0);">{{ section.settings.results_offer_area_button_text }}</a>
-        </div>
+        </div> -->
         {% endif %}
       </div>
       <div class="column half consultation-area">
@@ -150,7 +151,7 @@
         "type": "text",
         "id": "results_heading",
         "label": "Results heading",
-		"default": "Results"
+		    "default": "Bravo ! On a trouvé exactement le produit qu'il vous faut"
       },
 	  {
         "type": "paragraph",
@@ -160,19 +161,19 @@
         "type": "text",
         "id": "results_offer_area_heading",
         "label": "Offer heading",
-		"default": "Offrir un produit"
+		    "default": "Nous allons pouvoir préparer votre coloration végétale :"
       },
 	  {
         "type": "richtext",
         "id": "results_offer_area_content",
         "label": "Offer text content",
-		"default": "<p>C'est le meilleur produit selon les options que vous avez sélectionnées</p>"
+		    "default": "<p>Grâce aux réponses de votre diagnostic, notre équipe d'expert·e·s va pouvoir préparer votre coloration végétale sur-mesure.<br><br>Commandez-la dès maintenant pour conserver le résultat de votre diagnostic !</p>"
       },
 	  {
         "type": "text",
         "id": "results_offer_area_button_text",
         "label": "Offer button text",
-		"default": "Aller au produit"
+		    "default": "Aller au produit"
       },
 	  {
         "type": "paragraph",
@@ -182,19 +183,19 @@
         "type": "text",
         "id": "results_consultation_area_heading",
         "label": "Consultation heading",
-		"default": "Consulter un expert"
+		    "default": "Consultez l'un de nos experts !"
       },
 	  {
         "type": "richtext",
         "id": "results_consultation_area_content",
         "label": "Consultation text content",
-		"default": "<p>Participez à la session d'appel vidéo avec notre expert</p>"
+		    "default": "<p>Vous avez des doutes sur les réponses aux questions de votre diagnostic ? Besoin de conseils ? Demandez une consultation vidéo en direct avec l'un·e de nos expert·e·s coloristes.</p>"
       },
 	  {
         "type": "text",
         "id": "results_consultation_area_button_text",
         "label": "Consultation button text",
-		"default": "Consultez maintenant"
+		    "default": "Consultez maintenant"
       },
 	  {
         "type": "url",

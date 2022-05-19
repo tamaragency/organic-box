@@ -211,7 +211,13 @@
         });
 
   </script>
-  <script src="{{ 'custom.js' | asset_url }}" defer="defer"></script>
+  {% if template.suffix == "questionnaire" %}
+    <script src="{{ 'custom.js' | asset_url }}" defer="defer"></script>
+  {% endif %}
+  {% if template.suffix == "questionnaire2" %}
+    <script src="{{ 'custom2.js' | asset_url }}" defer="defer"></script>
+  {% endif %}
+
   {% render 'body-end-tag' %}
   <script id="et-iframe" data-version="0.5" data-widgetId="60bf81cfc026594dfa747c6d" src="https://client.consolto.com/iframeApp/iframeApp.js"  ></script>
 </body>

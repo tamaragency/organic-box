@@ -57,7 +57,8 @@ jQuery(function($){
           }
         });
         $(document).on('click', '.color-palette__consultation-overlay__end-result-cta', function(){
-            var domaine = "https://organicbox.fr";
+            // var domaine = "http://127.0.0.1:9292";
+          var domaine = "https://organicbox.fr";
             window.history.replaceState({ }, '', domaine +'/pages/quizz/resume');
 
             theme.questionnaireData[questionnaire_title_id].a = questionnaire_title_handle
